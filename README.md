@@ -1,4 +1,3 @@
-# studyBuddy V4.1.2
 STUDY BUDDY V4.1.2: (Python gui application)
 
 Are you tired of studying alone and looking for a reliable study partner? Look no further! Study Buddy is here to revolutionize your study experience. Our innovative app connects you with like-minded individuals who share your academic goals, creating a supportive community that motivates and inspires you to reachyour full potential.
