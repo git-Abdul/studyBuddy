@@ -4,7 +4,7 @@
 
 **With Study Buddy, you can:**
 
-* :calculator: Solve complex calculations with the integrated calculator.
+* ➕ Solve complex calculations with the integrated calculator.
 * :chart_with_upwards_trend: Visualize mathematical functions with the graph plotter.
 * :robot: Engage with Bard AI, your virtual study companion.
 * :stopwatch: Stay focused with the built-in timer.
