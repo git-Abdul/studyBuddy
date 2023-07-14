@@ -7,9 +7,20 @@ Study Buddy is an innovative app designed to enhance your study experience and h
 
 With Study Buddy, you can:
 
-Set Goals and Track Progress: Achieve your academic targets with Study Buddy's goal-setting feature. Define your study objectives, track your progress, and celebrate milestones together with your study partner. Our app keeps you motivated, focused, and accountable throughout your learning journey.
+Let's take a closer look at the key features that make the Study Buddy App an indispensable resource:
 
-Maintain Privacy and Security: At Study Buddy, we prioritize your privacy and security. Our app employs robust encryption measures to safeguard your personal information and study data. You can study with confidence, knowing that your privacy is our utmost concern.
+1. Calculator: The integrated calculator ensures that complex calculations are just a few taps away. Whether you're solving equations, working with formulas, or performing mathematical operations, the calculator feature will save you time and effort.
+
+2. Graph Plotter: Visualizing mathematical functions is made simple with the graph plotter. Plotting graphs and exploring their properties becomes effortless, allowing you to grasp concepts more effectively and gain a deeper understanding of mathematical relationships.
+
+3. Bard AI Integration: The Study Buddy App harnesses the power of artificial intelligence with the inclusion of Bard AI. Engage in interactive and immersive learning experiences by conversing with Bard AI, your virtual study companion. Ask questions, seek explanations, and receive personalized insights to enhance your understanding of various subjects.
+
+4. Timer: Stay focused and manage your time efficiently with the built-in timer. Set dedicated study sessions, break intervals, or reminders to maintain a healthy study routine. The timer feature helps you track your progress and maintain optimal productivity levels.
+
+5. Browser: Access a dedicated browser within the app to conduct research, gather information, and explore online resources without switching between multiple applications. Seamlessly switch between studying and browsing to streamline your learning process.
+
+6. Marks Calculator: Stay on top of your academic progress with the marks calculator. Input your scores, track your grades, and monitor your overall performance effortlessly. The marks calculator ensures you have a clear overview of your achievements and areas that require improvement.
+
 
 Don't let the challenges of studying alone hold you back. Join Study Buddy today and unlock a world of collaborative learning, support, and academic success. Together, we can achieve more!
 
