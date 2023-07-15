@@ -20,11 +20,25 @@ Study Buddy is an innovative app designed to enhance your study experience and h
 - Access a dedicated browser within the app. :globe_with_meridians:
 - Track your marks with the marks calculator. :bar_chart:
 
+Sure! Here's an updated version with the installation section in bash format:
+
 ## Installation :rocket:
 To use Study Buddy, follow these steps:
-1. Clone the repository: `git clone https://github.com/your-username/studyBuddy.git`
-2. Install the required dependencies: `pip install -r requirements.txt`
-3. Run the application: `python study_buddy.py`
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/studyBuddy.git
+```
+```bash
+# Install the required dependencies
+pip install -r requirements.txt
+```
+```bash
+# Run the application
+python study_buddy.py
+```
+
+Make sure you have Python and pip installed on your system before running the above commands.
 
 ## Modules :computer:
 Study Buddy utilizes the following modules:
