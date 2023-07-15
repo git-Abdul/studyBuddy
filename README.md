@@ -1,3 +1,12 @@
+---
+
+<div align="center">
+  <img src="https://i.postimg.cc/Jn7W4Qgd/Screenshot-2023-07-15-123157.png" />
+  <p align="center"> **STUDY BUDDY V4.1.2** :sparkles: (Python GUI application) </p>
+</div>
+
+---
+
 **STUDY BUDDY V4.1.2** :sparkles: (Python GUI application)
 
 **Study Buddy** is an innovative :fire: app designed to enhance your study experience and help you achieve your academic goals. With a range of powerful features, Study Buddy is here to make your studying more efficient, organized, and enjoyable.
