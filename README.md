@@ -62,7 +62,7 @@ Study Buddy utilizes the following modules:
 Contributions to Study Buddy are welcome! If you find any issues or have suggestions for improvements, please submit a pull request. Your contributions will help make Study Buddy even better.
 
 ## License :page_with_curl:
-Study Buddy is released under the [MIT License](https://github.com/your-username/studyBuddy/blob/main/LICENSE).
+Study Buddy is released under the [MIT License](https://github.com/git-Abdul/studyBuddy/blob/main/LICENSE).
 
 ---
 
