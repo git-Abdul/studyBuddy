@@ -4,14 +4,23 @@ import math
 import os
 from PIL import Image
 import tkinter as tk
+import sys
+from plyer import notification
 
 # Making the text crisp
 from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(1)
 
+signed_in_user = sys.argv[1]
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
 
 # functions=====================================================================
+
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
 
 def change_appearance_mode_event(self, new_appearance_mode: str):
     customtkinter.set_appearance_mode(new_appearance_mode)
@@ -60,28 +69,56 @@ def open_web():
 def open_bard():
     subprocess.run(["python", "bard.py"])
 
+user_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "users")
+directory_path = f"{user_path}/{signed_in_user}"
 
 def save_notes():
     text = self.textbox.get("1.0", "end-1c")  # Get the text from the textbox
 
     # Save the text to a file
-    with open("notes.txt", "w") as file:
-        file.write(text)
-
+    dialog = customtkinter.CTkInputDialog(text="Save file as:", title="Save File")
+    dialog_result = dialog.get_input()
+    if dialog_result:
+        with open(f"{directory_path}/{dialog_result}.txt", "w") as file:
+            file.write(text)
+    else:
+        notification.notify(
+            app_icon="icon.ico",
+            title="Invalid File Name",
+            message="Please check the file name",
+            timeout=5
+        )
 
 def open_notes():
     # Open the text file
-    with open("notes.txt", "r") as file:
-        text = file.read()
-    
-    # Clear the textbox and insert the text from the file
-    self.textbox.delete("1.0", "end")
-    self.textbox.insert("1.0", text)
-
+    dialog = customtkinter.CTkInputDialog(text="Enter file name:", title="Open File")
+    dialog_result = dialog.get_input()
+    if dialog_result:
+        try:
+            with open(f"{directory_path}/{dialog_result}.txt", "r") as file:
+                text = file.read()
+            # Clear the textbox and insert the text from the file
+            self.textbox.delete("1.0", "end")
+            self.textbox.insert("1.0", text)
+        except FileNotFoundError:
+            notification.notify(
+                app_icon="icon.ico",
+                title="File Not Found",
+                message="Please check the file name",
+                timeout=5
+            )
+    else:
+        notification.notify(
+            app_icon="icon.ico",
+            title="Invalid File Name",
+            message="Please check the file name",
+            timeout=5
+        )
+        
 # functions=====================================================================
 
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark","Light"
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)  # Modes: "System" (standard), "Dark","Light"
+customtkinter.set_default_color_theme(user_color)
 
 self = customtkinter.CTk()
 self.geometry(f"{1100}x{580}")
@@ -91,6 +128,11 @@ self.iconbitmap('icon.ico')
 self.grid_columnconfigure(1, weight=1)
 self.grid_columnconfigure((2, 3), weight=0)
 self.grid_rowconfigure((0, 1, 2, 4), weight=1)
+
+if os.path.isdir(directory_path):
+    print("Exists")
+else:
+    os.makedirs(directory_path, exist_ok=True)
 
 image_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "_images")
 self.logo_image = customtkinter.CTkImage(Image.open(os.path.join(image_path, "logo.png")), size=(35, 35))

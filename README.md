@@ -1,4 +1,4 @@
-# Study Buddy V4.1.2 ✨
+# Study Buddy V5.0 ✨
 
 ![Study Buddy](https://i.postimg.cc/Jn7W4Qgd/Screenshot-2023-07-15-123157.png)
 

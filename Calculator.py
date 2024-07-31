@@ -3,17 +3,31 @@ from tkinter import ttk
 import customtkinter as ctk
 import customtkinter
 import tkinter as tk
+import sys
 # Making the text crisp
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
+
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
+new_appearance_mode = sys.argv[4]
+print(user_theme)
+print(new_appearance_mode)
 
 screen = customtkinter.CTk()
 screen.title('Study Buddy • Calculator')
 screen.geometry("400x500")  # Smaller window size
 screen.iconbitmap('icon.ico')
 screen.resizable(False, False)
-customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+
+if user_theme != new_appearance_mode:
+    user_theme = new_appearance_mode
+
+customtkinter.set_appearance_mode(user_theme)
+customtkinter.set_default_color_theme(user_color)
+
+def getAppearanceMode(new_appearance_mode: str):
+    pass
 
 def click(number):
     global operator

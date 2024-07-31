@@ -5,12 +5,20 @@ import os
 from PIL import Image
 from tkinterweb import HtmlFrame
 from tkinter import messagebox
+import sys
 
 #Making the text crisp
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
 
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
+
 #functions=====================================================================
+
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
 
 def change_appearance_mode_event(self, new_appearance_mode: str):
     customtkinter.set_appearance_mode(new_appearance_mode)
@@ -61,8 +69,8 @@ def search_question():
     
 #functions=====================================================================
 
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme(user_color)
 
 self = customtkinter.CTk()
 self.geometry(f"{1100}x{580}")
@@ -133,12 +141,12 @@ entry.bind("<Return>", search_question)
 main_button_1 = customtkinter.CTkButton(master=self,text='Search', border_width=1, command=search_question)
 main_button_1.grid(row=3, column=3, padx=(20, 20), pady=(20, 20), sticky="nsew")
 
-webFrame = customtkinter.CTkFrame(self, width=500, height=900)  # Increase the height to make the textbox bigger
-webFrame.grid(row=0, column=1,columnspan=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
+webFrame = customtkinter.CTkFrame(self, width=500, height=1400)  # Increase the height to make the textbox bigger
+webFrame.grid(row=0, column=1,columnspan=3, rowspan=2, padx=(20, 20), pady=(20, 0), sticky="nsew")
 webFrame.grid_rowconfigure(0, weight=1)  # Allow the textbox to expand vertically
 webFrame.grid_columnconfigure(0, weight=1)
 
-frame = HtmlFrame(webFrame)
+frame = HtmlFrame(webFrame, messages_enabled = False)
 frame.pack(fill="both", expand=True)
 
 self.mainloop()

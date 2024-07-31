@@ -1,5 +1,11 @@
-import customtkinter as ctk
+import customtkinter
+import transformers
+from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline, GPT2TokenizerFast, GPT2LMHeadModel
+import torch
+from huggingface_hub import login
+from bs4 import BeautifulSoup
 import subprocess
+import requests
 from customtkinter import *
 import customtkinter
 import os
@@ -8,6 +14,13 @@ import math
 
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
+
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
+
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
 
 def change_appearance_mode_event(self, new_appearance_mode: str):
     customtkinter.set_appearance_mode(new_appearance_mode)
@@ -51,8 +64,10 @@ def open_web():
 def open_bard():
     subprocess.run(["python", "bard.py"])
 
-customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)
+customtkinter.set_default_color_theme(user_color)
+
+max_paragraphs = 2
 
 self = customtkinter.CTk()
 self.geometry(f"{1100}x{580}")
@@ -120,8 +135,37 @@ self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, value
                                                             command=lambda mode: change_scaling_event(self, mode))
 self.scaling_optionemenu.grid(row=12, column=0, padx=20, pady=(10, 20))
 
+def fetch_answer(question):
+  formatted_question = question.replace(' ', '_')
+  search_url = f"https://en.wikipedia.org/wiki/{formatted_question}"
+
+  response = requests.get(search_url)
+
+  if response.status_code == 200:
+    soup = BeautifulSoup(response.text, 'html.parser')
+
+    content = soup.find(id='content')
+    paragraphs = content.find_all('p')
+
+    answer = ''
+    for p in paragraphs[:max_paragraphs]:
+      answer += p.get_text() + ' '
+
+    return answer
+  else:
+    return "Sorry, I couldn't find an answer to that question."
 
 def send(event=None):
+
+    model = GPT2LMHeadModel.from_pretrained('gpt2')
+    tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
+    # pipeline = transformers.pipeline(
+    #     "text-generation",
+    #     model = AutoModelForCausalLM.from_pretrained("meta-llama/Meta-Llama-3.1-8B-Instruct"),
+    #     model_kwargs={"torch_dtype": torch.bfloat16},
+    #     device="cpu",
+    # )
+    
     send = "You -> " + e.get()
     txt.insert(END, send + "\n")  # Add a newline after the user's message
     user = e.get().lower()
@@ -208,13 +252,29 @@ def send(event=None):
 
     # ELSE
     else:
-        txt.insert(END,"Bot -> Sorry! I didn't get you, try again later. \n\n")
+        # prompt = user
+        # input_ids = tokenizer(prompt, return_tensors='pt').input_ids
+        # attention_mask = tokenizer(prompt, return_tensors='pt').attention_mask
+        # gen_tokens = model.generate(
+        #     input_ids, 
+        #     attention_mask=attention_mask, 
+        #     do_sample=True, 
+        #     temperature=0.7, 
+        #     max_length=len(input_ids[0]) + 100,
+        #     pad_token_id=tokenizer.eos_token_id,
+        #     eos_token_id=tokenizer.eos_token_id,
+        #     num_return_sequences=1
+        # )
+        # gen_text = tokenizer.batch_decode(gen_tokens, skip_special_tokens=True)[0]
+        
+         txt.insert(END, "Invalid Input", "\n\n")
       
 txt = customtkinter.CTkTextbox(self, width=500, height=500, font=('System', 20))
 txt.grid(row=0, column=1,columnspan=3, padx=(20, 20), pady=(20, 0), sticky="nsew")
 txt.insert(1.0, "Bot -> HELP MENU: `help commands`, `help utility`, `help run` or type (commandName) - help to get more information about it.\n\n")
 txt.grid_rowconfigure(0, weight=1)
 txt.grid_columnconfigure(0, weight=1)
+txt.configure(state="disabled")
 
 e = customtkinter.CTkEntry(self, placeholder_text='Type a prompt:')
 e.grid(row=3, column=1, columnspan=2, padx=(20, 0), pady=(20, 20), sticky="nsew")

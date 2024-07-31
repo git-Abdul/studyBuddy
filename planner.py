@@ -5,9 +5,18 @@ import math
 import os
 from PIL import Image
 import json
+import sys
+from plyer import notification
 
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
+
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
+
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
 
 def change_appearance_mode_event(self, new_appearance_mode: str):
     customtkinter.set_appearance_mode(new_appearance_mode)
@@ -47,21 +56,63 @@ def open_web():
     
 def open_bard():
     subprocess.run(["python", "bard.py"])
+    
+signed_in_user = sys.argv[1]
+user_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "users")
+directory_path = f"{user_path}/{signed_in_user}"
+
+if os.path.isdir(directory_path):
+    print("Exists")
+else:
+    os.makedirs(directory_path, exist_ok=True)
 
 def save_timetable():
     timetable_data = []
     for i in range(1, num_rows):
         row_data = [entry.get() for entry in timetable_entries[i]]
         timetable_data.append(row_data)
+        
+    dialog = customtkinter.CTkInputDialog(text="Enter file name:", title="Save as")
+    dialog_result = dialog.get_input()  # Capture the input immediately
+    
+    if dialog_result is None or dialog_result.strip() == "":
+        notification.notify(
+            app_icon="icon.ico",
+            title="Invalid File Name",
+            message="Please check the file name",
+            timeout=5
+        )
+        return  # Exit the function if input is invalid
     
     # Save the timetable data as JSON
-    with open("timetable.json", "w") as file:
+    with open(f"{directory_path}/{dialog_result}.json", "w") as file:
         json.dump(timetable_data, file)
 
 def open_timetable():
+    dialog = customtkinter.CTkInputDialog(text="Enter file name:", title="Open File")
+    dialog_result = dialog.get_input()  # Capture the input immediately
+    
+    if dialog_result is None or dialog_result.strip() == "":
+        notification.notify(
+            app_icon="icon.ico",
+            title="Invalid File Name",
+            message="Please check the file name",
+            timeout=5
+        )
+        return  # Exit the function if input is invalid
+    
     # Read the timetable data from the JSON file
-    with open("timetable.json", "r") as file:
-        timetable_data = json.load(file)
+    try:
+        with open(f"{directory_path}/{dialog_result}.json", "r") as file:
+            timetable_data = json.load(file)
+    except FileNotFoundError:
+        notification.notify(
+            app_icon="icon.ico",
+            title="File Not Found",
+            message="The specified file does not exist",
+            timeout=5
+        )
+        return  # Exit the function if file is not found
     
     # Update the timetable entries with the loaded data
     for i in range(1, num_rows):
@@ -70,12 +121,12 @@ def open_timetable():
             entry.delete(0, "end")
             entry.insert(0, timetable_data[i-1][j])
 
-customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)
+customtkinter.set_default_color_theme(user_color)
 
 self = customtkinter.CTk()
 self.geometry(f"{750}x{580}")
-self.title('Study Buddy • Planner')
+self.title(f'Study Buddy • {signed_in_user}')
 self.iconbitmap('icon.ico')
 self.resizable(False, False)
 

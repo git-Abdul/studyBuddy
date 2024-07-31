@@ -2,6 +2,14 @@ import customtkinter as ctk
 import customtkinter
 from plyer import notification
 import threading
+import sys
+
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
+
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
 
 def start_timer():
     try:
@@ -17,6 +25,10 @@ def start_timer():
             message="Please enter a valid number of minutes.",
             timeout=5  # Display notification for 5 seconds
         )
+        
+
+def printf():
+    print("Hello World")
 
 # Define the function to handle timer countdown and show notification
 def timer_countdown(seconds):
@@ -45,8 +57,8 @@ window.iconbitmap('icon.ico')
 window.resizable(False, False)
 window.attributes("-topmost", True)
 
-customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)
+customtkinter.set_default_color_theme(user_color)
 
 entry = ctk.CTkEntry(window)
 entry.grid(row=0, column=0, padx=10, pady=10)

@@ -1,16 +1,24 @@
 import customtkinter
 from customtkinter import *
+import sys
+
+user_color = sys.argv[2]
+user_theme = sys.argv[3] 
 
 #Making the text crisp
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
 
+new_theme_mode = sys.argv[4]
+if user_theme != new_theme_mode:
+    user_theme = new_theme_mode
+
 def change_appearance_mode_event(self, new_appearance_mode: str):
     customtkinter.set_appearance_mode(new_appearance_mode)
 
 w = customtkinter.CTk()
-customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
-customtkinter.set_default_color_theme("dark-blue")
+customtkinter.set_appearance_mode(user_theme)  # Modes: "System" (standard), "Dark", "Light"
+customtkinter.set_default_color_theme(user_color)
 w.geometry('450x600')
 w.title('Study Buddy • Marks')
 w.iconbitmap('icon.ico')
