@@ -27,7 +27,7 @@ To use Study Buddy, follow these steps:
 
 ```bash
 # Clone the repository
-git clone https://github.com/your-username/studyBuddy.git
+git clone https://github.com/git-Abdul/studyBuddy.git
 ```
 ```bash
 # Install the required dependencies
