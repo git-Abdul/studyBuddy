@@ -8,10 +8,11 @@ import PIL.ImageOps
 from win32mica import ApplyMica, MicaTheme, MicaStyle
 import threading
 from plyer import notification
-from utils import logSignInSignOutTime, setUserColor, setUserTheme, reopen_window
+from utils import logSignInSignOutTime, setUserColor, setUserTheme, reopen_window, reopen_signInPage
 import datetime
 import sqlite3
 import PIL.Image as Image
+import time, signal, psutil
 
 #Making the text crisp
 from ctypes import windll, byref, c_int, sizeof
@@ -140,7 +141,7 @@ def open_web():
     thread.start()
     
 def Bard():
-    subprocess.run(["python", "bard.py", signed_in_user, user_color, user_theme, new_theme_mode])
+    subprocess.run(["python", "quill.py", signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_bard():
     thread = threading.Thread(target=Bard)
@@ -153,8 +154,26 @@ def open_Sticky():
     thread = threading.Thread(target=Sticky)
     thread.start()
     
-def createNewTab():
-    pass
+def Profile():
+    subprocess.run(["python", "profileMenu.py", signed_in_user, user_color, user_theme, new_theme_mode])
+    
+def open_Profile():
+    thread = threading.Thread(target=Profile)
+    thread.start()
+
+    
+def check_file_exists(file_name, directory="."):
+    file_path = os.path.join(directory, file_name) 
+    return os.path.isfile(file_path)
+    
+def checkProfileChanges(event=None):
+    file_to_check = "ProfileChanges.txt"
+    if check_file_exists(file_to_check):
+        print(f"File '{file_to_check}' exists.")
+        os.remove(file_to_check)
+        reopen_signInPage(self)
+    else:
+        print(f"File '{file_to_check}' does not exist.")
 
 #functions=====================================================================
 
@@ -185,7 +204,7 @@ def callbackFunction(NewTheme):
         
 def open_home_window():
     global signed_in_user
-    subprocess.run(["python", "signin.py"])
+    subprocess.run(["python", "main.py"])
     self.withdraw()
          
 def close_current_window(): 
@@ -199,6 +218,7 @@ def userLogout():
 #ApplyMica(HWND=parent_hwnd, Theme=mode, Style=style, OnThemeChange=callbackFunction)
 self.title(f'Study Buddy - Hello {signed_in_user}')
 self.iconbitmap('icon.ico')
+self.bind("<FocusIn>", checkProfileChanges)
 
 Nunito = customtkinter.CTkFont(family="Nunito", size=24, weight="bold")
 
@@ -218,6 +238,7 @@ self.plotter = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plott
 self.calc = customtkinter.CTkImage(Image.open(os.path.join(image_path, "calc.png")), size=(22,22))
 self.placeHolder = customtkinter.CTkImage(Image.open(os.path.join(image_path, "placeHolder.png")), size=(22,22))
 self.logout = customtkinter.CTkImage(Image.open(os.path.join(image_path, "logout.png")), size=(22,22))
+self.profilePlaceholder = customtkinter.CTkImage(Image.open(os.path.join(image_path, "profilePlaceholder.png")), size=(22,22))
 
 self.plusIcon = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plus.png")), size=(15,15))
 
@@ -227,7 +248,7 @@ self.btnNotes = customtkinter.CTkImage(Image.open(os.path.join(image_path, "note
 self.btnTimer = customtkinter.CTkImage(Image.open(os.path.join(image_path, "timer.png")), size=(32,32))
 self.btnGraph = customtkinter.CTkImage(Image.open(os.path.join(image_path, "plotter.png")), size=(32,32))
 self.btnMarks = customtkinter.CTkImage(Image.open(os.path.join(image_path, "marks.png")), size=(32,32))
-self.btnBard = customtkinter.CTkImage(Image.open(os.path.join(image_path, "bard.png")), size=(32,32))
+self.btnBard = customtkinter.CTkImage(Image.open(os.path.join(image_path, "quill.png")), size=(32,32))
 self.btnWeb = customtkinter.CTkImage(Image.open(os.path.join(image_path, "webview.png")), size=(32,32))
 self.btnSticky = customtkinter.CTkImage(Image.open(os.path.join(image_path, "sticky.png")), size=(32,32))
     
@@ -395,8 +416,14 @@ self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, value
                                                             command=lambda mode: change_scaling_event(self, mode))
 self.scaling_optionemenu.grid(row=13, column=0, padx=20, pady=(10, 10))
 
-self.btnLogout = customtkinter.CTkButton(self.sidebar_frame, text="Logout", image=self.logout, compound='left', fg_color="#cf352e", hover_color="#B02B25", command=userLogout)
-self.btnLogout.grid(row=14, column=0, padx=20, pady=(10, 20))
+self.btnLogout = customtkinter.CTkButton(self.sidebar_frame, image=self.logout, text="", compound='left', fg_color="#cf352e", hover_color="#B02B25", command=userLogout, width=60)
+self.btnLogout.grid(row=14, column=0, pady=10, padx=(70, 5)) 
+
+self.newButton = customtkinter.CTkButton(self.sidebar_frame, text="", image=self.profilePlaceholder, width=60, command=open_Profile)  
+self.newButton.grid(row=14, column=0, pady=10, padx=(5, 70)) 
+
+self.sidebar_frame.columnconfigure(0, weight=0)
+self.sidebar_frame.columnconfigure(1, weight=0)
 
 # create main entry and button
 self.entry = customtkinter.CTkEntry(self, placeholder_text='Facing any issues? Open the help desk for more information about the application!')

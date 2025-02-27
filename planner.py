@@ -34,28 +34,31 @@ def center_window(w):
     w.geometry(f"+{x_offset}+{y_offset}")
 
 def open_Calc():
-    subprocess.run(["python", "Calculator.py"])
+    subprocess.run(["python", "Calculator.py", signed_in_user, user_color, user_theme, new_theme_mode])
 
 def open_Marks():
-    subprocess.run(["python", "Marks.py"])
-
+    subprocess.run(["python", "Marks.py", signed_in_user, user_color, user_theme, new_theme_mode])
+    
 def open_Chart():
-    subprocess.run(["python", "Chart.py"])
+    subprocess.run(["python", "Chart.py", signed_in_user, user_color, user_theme, new_theme_mode])
 
 def open_Help():
-    subprocess.run(['python', 'helpDesk.py'])
+    subprocess.run(['python', 'helpDesk.py', signed_in_user, user_color, user_theme, new_theme_mode])
+    
+def open_Time():
+    subprocess.run(['python', 'planner.py', signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_Timer():
-    subprocess.run(['python', 'timer.py'])
-    
+    subprocess.run(['python', 'timer.py', signed_in_user, user_color, user_theme, new_theme_mode])
+
 def open_Notes():
-    subprocess.run(["python", "notes.py"])
-    
-def open_web():
-    subprocess.run(["python", "browser.py"])
+    subprocess.run(["python", "notes.py", signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_bard():
-    subprocess.run(["python", "bard.py"])
+    subprocess.run(["python", "quill.py", signed_in_user, user_color, user_theme, new_theme_mode])
+    
+def open_web():
+    subprocess.run(["python", "browser.py", signed_in_user, user_color, user_theme, new_theme_mode])
     
 signed_in_user = sys.argv[1]
 user_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "users")
@@ -151,24 +154,6 @@ self.sidebar_frame.grid_rowconfigure(6, weight=1)
 self.navigation_frame_label = customtkinter.CTkLabel(self.sidebar_frame, text=" Study Buddy", image=self.logo_image,
                                                             compound="left", font=customtkinter.CTkFont(size=20, weight="bold"))
 self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
-
-self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, command=open_Calc, image=self.calc, compound="right", text='Open Calculator')
-self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=(20, 10))
-
-self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, command=open_Chart, image=self.plotter, compound='right', text='Open Graph')
-self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
-
-self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, command=open_Marks, image=self.marks, compound='right', text='Open Marks Calc')
-self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=10)
-
-self.sidebar_button_5 = customtkinter.CTkButton(self.sidebar_frame, command=open_Timer, image=self.timer, compound="right", text='Open Timer')
-self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=10)  
-
-self.sidebar_button_6 = customtkinter.CTkButton(self.sidebar_frame, command=open_Notes, image=self.notes, compound="right", text='Open Notes')
-self.sidebar_button_6.grid(row=6, column=0, padx=20, pady=10)
-
-self.home_frame_button_8 = customtkinter.CTkButton(self.sidebar_frame, text="Open Bard AI", image=self.bard, compound="right", command=open_bard)
-self.home_frame_button_8.grid(row=7, column=0, padx=20, pady=10)
 
 # Set uniform padding between buttons
 self.sidebar_frame.grid_rowconfigure((6), weight=0)

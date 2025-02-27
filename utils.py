@@ -2,6 +2,7 @@ import datetime
 from time import gmtime
 import sqlite3
 import subprocess
+import os
 
 def logSignInSignOutTime(SignIn: bool, UserName: str):
     print('logSignInSignOutTime')
@@ -28,6 +29,23 @@ def logSignInSignOutTime(SignIn: bool, UserName: str):
     # Close the connection
     connection.close()
     
+def setUserName(newUserName: str, UserName: str):
+    connection = sqlite3.connect('users.db')
+    cursor = connection.cursor()
+    mySql = f"UPDATE users set username = '{newUserName}' where username='{UserName}'"
+    cursor.execute(f'{mySql}')
+
+    # Commit the changes
+    connection.commit()
+        
+    # Close the connection
+    connection.close()
+    users_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "users")
+    old_path = os.path.join(users_dir, UserName)
+    new_path = os.path.join(users_dir, newUserName)
+    os.rename(old_path, new_path)
+    print(f"Folder '{old_path}' successfully renamed to '{new_path}'.")
+    
 def setUserColor(ColorCode: str, UserName: str):
     connection = sqlite3.connect('users.db')
     cursor = connection.cursor()
@@ -52,6 +70,10 @@ def setUserTheme(ThemeCode: str, UserName: str):
         
     # Close the connection
     connection.close()
+    
+def reopen_signInPage(window):
+    window.destroy()
+    subprocess.run(["python", "main.py"])
     
 def reopen_window(window, signed_in_user, logout_time, user_color, user_theme):
     # Close the current window and reopen it with the same parameters

@@ -1,9 +1,4 @@
 import customtkinter
-import transformers
-from transformers import AutoModelForCausalLM, AutoTokenizer, pipeline, GPT2TokenizerFast, GPT2LMHeadModel
-import torch
-from huggingface_hub import login
-from bs4 import BeautifulSoup
 import subprocess
 import requests
 from customtkinter import *
@@ -15,6 +10,7 @@ import math
 from ctypes import windll
 windll.shcore.SetProcessDpiAwareness(1)
 
+signed_in_user = sys.argv[1]
 user_color = sys.argv[2]
 user_theme = sys.argv[3] 
 
@@ -38,31 +34,31 @@ def center_window(w):
     w.geometry(f"+{x_offset}+{y_offset}")
 
 def open_Calc():
-    subprocess.run(["python", "Calculator.py"])
+    subprocess.run(["python", "Calculator.py", signed_in_user, user_color, user_theme, new_theme_mode])
 
 def open_Marks():
-    subprocess.run(["python", "Marks.py"])
+    subprocess.run(["python", "Marks.py", signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_Chart():
-    subprocess.run(["python", "Chart.py"])
+    subprocess.run(["python", "Chart.py", signed_in_user, user_color, user_theme, new_theme_mode])
 
 def open_Help():
-    subprocess.run(['python', 'helpDesk.py'])
+    subprocess.run(['python', 'helpDesk.py', signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_Time():
-    subprocess.run(['python', 'planner.py'])
+    subprocess.run(['python', 'planner.py', signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_Timer():
-    subprocess.run(['python', 'timer.py'])
-    
+    subprocess.run(['python', 'timer.py', signed_in_user, user_color, user_theme, new_theme_mode])
+
 def open_Notes():
-    subprocess.run(["python", "notes.py"])
+    subprocess.run(["python", "notes.py", signed_in_user, user_color, user_theme, new_theme_mode])
+    
+def open_bard():
+    subprocess.run(["python", "quill.py", signed_in_user, user_color, user_theme, new_theme_mode])
     
 def open_web():
-    subprocess.run(["python", "browser.py"])
-
-def open_bard():
-    subprocess.run(["python", "bard.py"])
+    subprocess.run(["python", "browser.py", signed_in_user, user_color, user_theme, new_theme_mode])
 
 customtkinter.set_appearance_mode(user_theme)
 customtkinter.set_default_color_theme(user_color)
@@ -98,36 +94,10 @@ self.navigation_frame_label = customtkinter.CTkLabel(self.sidebar_frame, text=" 
                                                             compound="left", font=customtkinter.CTkFont(size=20, weight="bold"))
 self.navigation_frame_label.grid(row=0, column=0, padx=20, pady=20)
 
-self.sidebar_button_1 = customtkinter.CTkButton(self.sidebar_frame, command=open_Calc, image=self.calc, compound="right", text='Open Calculator')
-self.sidebar_button_1.grid(row=1, column=0, padx=20, pady=(20, 10))
-
-self.sidebar_button_2 = customtkinter.CTkButton(self.sidebar_frame, command=open_Chart, image=self.plotter, compound='right', text='Open Graph')
-self.sidebar_button_2.grid(row=2, column=0, padx=20, pady=10)
-
-self.sidebar_button_3 = customtkinter.CTkButton(self.sidebar_frame, command=open_Marks, image=self.marks, compound='right', text='Open Marks Calc')
-self.sidebar_button_3.grid(row=3, column=0, padx=20, pady=10)
-
-self.sidebar_button_4 = customtkinter.CTkButton(self.sidebar_frame, command=open_Time, image=self.planner, compound="right", text='Open Planner')
-self.sidebar_button_4.grid(row=4, column=0, padx=20, pady=(10, 10))  
-
-self.sidebar_button_5 = customtkinter.CTkButton(self.sidebar_frame, command=open_Timer, image=self.timer, compound="right", text='Open Timer')
-self.sidebar_button_5.grid(row=5, column=0, padx=20, pady=10)  
-
-self.sidebar_button_6 = customtkinter.CTkButton(self.sidebar_frame, command=open_Notes, image=self.notes, compound="right", text='Open Notes')
-self.sidebar_button_6.grid(row=6, column=0, padx=20, pady=10)
-
-self.sidebar_button_7 = customtkinter.CTkButton(self.sidebar_frame, command=open_web, image= self.web, compound="right", text='Open Webview')
-self.sidebar_button_7.grid(row=7, column=0, padx=20, pady=10)
-
-self.home_frame_button_8 = customtkinter.CTkButton(self.sidebar_frame, text="Open Bard AI", image=self.bard, compound="right", command=open_bard)
-self.home_frame_button_8.grid(row=8, column=0, padx=20, pady=10)
-
 # Set uniform padding between buttons
 self.sidebar_frame.grid_rowconfigure((10, 6), weight=0)
 self.sidebar_frame.grid_rowconfigure(10, weight=1)
 
-self.appearance_mode_label = customtkinter.CTkLabel(self.sidebar_frame, text="Appearance Mode:", anchor="w")
-self.appearance_mode_label.grid(row=10, column=0, padx=20, pady=(10, 0))
 self.appearance_mode_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, values=["System", "Light", "Dark"],
                                                             command=lambda mode: change_appearance_mode_event(self, mode))
 self.appearance_mode_optionemenu.grid(row=11, column=0, padx=20, pady=(10, 10))
@@ -135,37 +105,7 @@ self.scaling_optionemenu = customtkinter.CTkOptionMenu(self.sidebar_frame, value
                                                             command=lambda mode: change_scaling_event(self, mode))
 self.scaling_optionemenu.grid(row=12, column=0, padx=20, pady=(10, 20))
 
-def fetch_answer(question):
-  formatted_question = question.replace(' ', '_')
-  search_url = f"https://en.wikipedia.org/wiki/{formatted_question}"
-
-  response = requests.get(search_url)
-
-  if response.status_code == 200:
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    content = soup.find(id='content')
-    paragraphs = content.find_all('p')
-
-    answer = ''
-    for p in paragraphs[:max_paragraphs]:
-      answer += p.get_text() + ' '
-
-    return answer
-  else:
-    return "Sorry, I couldn't find an answer to that question."
-
 def send(event=None):
-
-    model = GPT2LMHeadModel.from_pretrained('gpt2')
-    tokenizer = GPT2TokenizerFast.from_pretrained('gpt2')
-    # pipeline = transformers.pipeline(
-    #     "text-generation",
-    #     model = AutoModelForCausalLM.from_pretrained("meta-llama/Meta-Llama-3.1-8B-Instruct"),
-    #     model_kwargs={"torch_dtype": torch.bfloat16},
-    #     device="cpu",
-    # )
-    
     send = "You -> " + e.get()
     txt.insert(END, send + "\n")  # Add a newline after the user's message
     user = e.get().lower()
@@ -252,21 +192,6 @@ def send(event=None):
 
     # ELSE
     else:
-        # prompt = user
-        # input_ids = tokenizer(prompt, return_tensors='pt').input_ids
-        # attention_mask = tokenizer(prompt, return_tensors='pt').attention_mask
-        # gen_tokens = model.generate(
-        #     input_ids, 
-        #     attention_mask=attention_mask, 
-        #     do_sample=True, 
-        #     temperature=0.7, 
-        #     max_length=len(input_ids[0]) + 100,
-        #     pad_token_id=tokenizer.eos_token_id,
-        #     eos_token_id=tokenizer.eos_token_id,
-        #     num_return_sequences=1
-        # )
-        # gen_text = tokenizer.batch_decode(gen_tokens, skip_special_tokens=True)[0]
-        
          txt.insert(END, "Invalid Input", "\n\n")
       
 txt = customtkinter.CTkTextbox(self, width=500, height=500, font=('System', 20))
