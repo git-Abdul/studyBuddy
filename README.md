@@ -67,7 +67,7 @@ Study Buddy utilizes the following modules:
 
 ## Usage 💡
 
-Launch Study Buddy by running the study_buddy.py file.
+Launch Study Buddy by running the main.py file.
 Explore the different features available, including the new UI improvements, color theming, database integration, Quill AI chatbot, and sticky notes applet.
 Utilize the calculator to solve complex calculations, work with formulas, or perform mathematical operations.
 Use the graph plotter to visualize mathematical functions and explore their properties.
