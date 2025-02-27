@@ -13,7 +13,7 @@ windll.shcore.SetProcessDpiAwareness(1)
 username = sys.argv[1]
 user_color = sys.argv[2]
 user_theme = sys.argv[3]
-client = genai.Client(api_key="AIzaSyBb46kSdeDWN1tN0oT771Q9g9e7TeAt6ws") 
+client = genai.Client(api_key=None) 
 
 new_theme_mode = sys.argv[4]
 if user_theme != new_theme_mode:
