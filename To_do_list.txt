@@ -1,0 +1,4 @@
+Order of Changes in this branch:
+
+1. Changing user management and login system.
+2. Changing general application ui to a more "material you" approach.
