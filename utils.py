@@ -4,6 +4,13 @@ import sqlite3
 import subprocess
 import os
 
+def center_window(window):
+    screen_width = window.winfo_screenwidth()
+    screen_height = window.winfo_screenheight()
+    x = (screen_width - window.winfo_reqwidth()) // 2
+    y = (screen_height - window.winfo_reqheight()) // 2
+    window.geometry(f"+{x}+{y}")
+
 def logSignInSignOutTime(SignIn: bool, UserName: str):
     print('logSignInSignOutTime')
     currentTime = datetime.datetime.now()
