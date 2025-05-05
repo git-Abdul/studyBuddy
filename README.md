@@ -1,4 +1,4 @@
-# Study Buddy V6.0 ✨
+# Study Buddy V6.1 ✨
 
 ![Study Buddy](https://i.postimg.cc/90NZFFrt/2.png)
 
@@ -27,6 +27,7 @@ Study Buddy is an innovative app designed to enhance your study experience and h
 
 ## New Features ✨
 
+-   **Single File Program:** All modules and seperate applications have been bundled into a single program, improving the time taken to open each module application from 4-5 seconds to under one second. All modules have been bundled together in the modules folder, for easy access and debugging.
 -   **Enhanced User Experience with UI Improvements:** Enjoy a sleek and modern interface with improved responsiveness and intuitive navigation.
 -   **Personalized Color Theming:** Customize your study environment with a wide range of color themes to suit your preferences and mood.
 -   **Robust Database System:** Store and manage your study data with our newly implemented database system, ensuring data integrity and quick access.
